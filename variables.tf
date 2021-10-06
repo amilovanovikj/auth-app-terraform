@@ -51,6 +51,7 @@ locals {
   env = {
     dev = {
       env_char           = "d"
+      node_env           = "development"
       vnet               = "${local.project_name}-test-dev-vnet"
       subnet             = "${local.project_name}-${var.env_name}-subnet"
       subnet_cidr        = "172.16.30.0/27"
@@ -58,6 +59,7 @@ locals {
     }
     test = {
       env_char           = "t"
+      node_env           = "testing"
       vnet               = "${local.project_name}-test-dev-vnet"
       subnet             = "${local.project_name}-${var.env_name}-subnet"
       subnet_cidr        = "172.16.30.32/27"
@@ -65,6 +67,7 @@ locals {
     }
     prod = {
       env_char           = "p"
+      node_env           = "production"
       vnet               = "${local.project_name}-prod-vnet"
       subnet             = "${local.project_name}-${var.env_name}-subnet"
       subnet_cidr        = "172.16.31.0/27"
@@ -120,6 +123,7 @@ locals {
     acr = {
       name = data.azurerm_container_registry.acr.name
       id   = data.azurerm_container_registry.acr.id
+      rg   = data.azurerm_container_registry.acr.resource_group_name
     }
 
     asp = {
@@ -129,8 +133,9 @@ locals {
       vnet_rg     = data.azurerm_resource_group.shared.name
       vnet        = "${local.env["${var.env_name}"].vnet}"
       subnet      = "${local.project_name}-${var.env_name}-webapp-subnet"
-      subnet_cidr = "${local.env["${var.env_name}"].webapp_subnet_cidr}"
+      subnet_cidr = local.env["${var.env_name}"].webapp_subnet_cidr
       route_table = data.azurerm_route_table.vnet_rt.id
+      node_env    = local.env["${var.env_name}"].node_env
     }
 
     backend = {

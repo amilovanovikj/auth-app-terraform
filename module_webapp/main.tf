@@ -136,11 +136,3 @@ resource "azurerm_subnet_route_table_association" "vnet_route" {
   subnet_id      = azurerm_subnet.webapp.id
   route_table_id = var.env.asp.route_table
 }
-
-output "backend_id" {
-  value = azurerm_app_service.backend.identity.0.principal_id
-}
-
-output "frontend_id" {
-  value = azurerm_app_service.frontend.identity.0.principal_id
-}

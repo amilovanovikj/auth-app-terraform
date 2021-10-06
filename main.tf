@@ -1,6 +1,9 @@
 module "webapp" {
   env           = local.variables
   source        = "./module_webapp"
+  depends_on    = [
+    module.database
+  ]
 }
 
 module "keyvault" {
@@ -31,4 +34,16 @@ resource "azurerm_subnet" "subnet" {
   address_prefixes     = [ local.env["${var.env_name}"].subnet_cidr ]
   
   enforce_private_link_endpoint_network_policies = true
+}
+
+output "webapp_ip_addresses" {
+  value = module.webapp.ip_addresses
+}
+
+output "acr_name" {
+  value = local.variables.acr.name
+}
+
+output "acr_rg" {
+  value = local.variables.acr.rg
 }
