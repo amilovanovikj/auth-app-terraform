@@ -1,0 +1,66 @@
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'The terraform command to run [ plan, apply, destroy ]'
+        required: true
+        default: plan
+      environment:
+        description: 'The environment to provision [ dev, test, prod ]'
+        required: true
+        default: dev
+
+env:
+  ARM_CLIENT_ID:        ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET:    ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID:  ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID:        ${{ secrets.ARM_TENANT_ID }}
+  STORAGE_ACCOUNT_NAME: tfstate01auth
+  RESOURCE_GROUP_NAME:  auth-shared-rg
+
+jobs:
+  terraform:
+    name: Terraform 
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment }}
+    steps:
+    - name: Az login
+      run: |
+        az login --service-principal -u ${{ secrets.ARM_CLIENT_ID }} -p ${{ secrets.ARM_CLIENT_SECRET }} -t ${{ secrets.ARM_TENANT_ID }} > /dev/null
+        az account set -s ${{ secrets.ARM_SUBSCRIPTION_ID }} > /dev/null
+    - name: Get runner public IP
+      id: ip
+      uses: haythem/public-ip@v1.2
+    - name: Add runner IP to storage account firewall
+      run: |
+        az storage account network-rule add -n ${{ env.STORAGE_ACCOUNT_NAME }} -g ${{ env.RESOURCE_GROUP_NAME }} --ip-address ${{ steps.ip.outputs.ipv4 }} > /dev/null
+    - name: Terraform init
+      run: |
+        terraform init -upgrade \
+          -backend-config="key=auth-${{ github.event.inputs.environment }}.tfstate"
+    - name: Terraform ${{ github.event.inputs.command }}
+      run: |
+        case ${{ github.event.inputs.command }} in
+          plan)
+            terraform plan -input=false \
+              -var 'env_name=${{ github.event.inputs.environment }}' \
+              -var 'vault_pass=${{ secrets.VAULT_PASS }}' \
+              -var 'sql_login=${{ secrets.SQL_LOGIN }}' \
+              -var 'sql_password=${{ secrets.SQL_PASSWORD }}'
+            ;;
+          *)
+            terraform ${{ github.event.inputs.command }} -input=false -auto-approve \
+              -var 'env_name=${{ github.event.inputs.environment }}' \
+              -var 'vault_pass=${{ secrets.VAULT_PASS }}' \
+              -var 'sql_login=${{ secrets.SQL_LOGIN }}' \
+              -var 'sql_password=${{ secrets.SQL_PASSWORD }}'
+            ;;
+        esac
+    - name: Remove runner IP from storage account firewall
+      if: always()
+      run: |
+        az storage account network-rule remove -n ${{ env.STORAGE_ACCOUNT_NAME }} -g ${{ env.RESOURCE_GROUP_NAME }} --ip-address ${{ steps.ip.outputs.ipv4 }} > /dev/null
+    - name: Az logout
+      if: always()
+      run: az logout

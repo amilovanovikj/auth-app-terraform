@@ -12,7 +12,7 @@ terraform {
   backend "azurerm" {
     resource_group_name  = "auth-shared-rg"
     storage_account_name = "tfstate01auth"
-    # container_name       = "tfstate-${env_char}${env_num}-auth"
+    container_name       = "tfstate-auth-container"
     # key                  = "auth-${env}.tfstate"
   }
 }
@@ -20,11 +20,6 @@ terraform {
 provider "azurerm" {
 	features {}
   skip_provider_registration = true
-  
-  subscription_id = var.subscription_id
-  client_id       = var.client_id
-  client_secret   = var.client_secret
-  tenant_id       = var.tenant_id
 }
 
 provider "ansiblevault" {
