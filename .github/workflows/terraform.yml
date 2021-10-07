@@ -79,10 +79,11 @@ jobs:
             echo "Invalid command: ${{ github.event.inputs.command }}"
             ;;
         esac
-    - name: Remove runner IP from storage account firewall
+    - name: Remove runner IP from storage account and key vault firewall
       if: always()
       run: |
         az storage account network-rule remove -n ${{ env.STORAGE_ACCOUNT_NAME }} -g ${{ env.RESOURCE_GROUP_NAME }} --ip-address ${{ steps.ip.outputs.ipv4 }} > /dev/null
+        az keyvault network-rule remove -n ${{ secrets.KEY_VAULT_NAME }} -g ${{ env.RESOURCE_GROUP_NAME }} --ip-address ${{ steps.ip.outputs.ipv4 }}/32 > /dev/null
     - name: Az logout
       if: always()
       run: az logout

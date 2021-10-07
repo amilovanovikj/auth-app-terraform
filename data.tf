@@ -1,3 +1,7 @@
+data "http" "runner_ip" {
+  url = "http://ipv4.icanhazip.com"
+}
+
 data azurerm_resource_group "shared" {
   name = "auth-shared-rg"
 }

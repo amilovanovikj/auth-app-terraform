@@ -11,6 +11,7 @@ resource "azurerm_key_vault" "kv" {
   network_acls {
     default_action = "Deny"
     bypass         = "None"
+    ip_rules = [ var.env.kv.runner_ip ]
   }
 }
 

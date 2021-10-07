@@ -71,6 +71,7 @@ locals {
       secrets_path = "secrets-${var.env_name}.json"
       admin_id     = "d87677e2-9a1e-4a6f-b9fb-a45eb03975ad"
       dns_zone     = data.azurerm_private_dns_zone.vaultcore.id
+      runner_ip    = "${chomp(data.http.runner_ip.body)}/32"
     }
 
     sql = {
