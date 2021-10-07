@@ -25,6 +25,8 @@ jobs:
     environment:
       name: ${{ github.event.inputs.environment }}
     steps:
+    - name: Git checkout
+      uses: actions/checkout@v2
     - name: Az login
       run: |
         az login --service-principal -u ${{ secrets.ARM_CLIENT_ID }} -p ${{ secrets.ARM_CLIENT_SECRET }} -t ${{ secrets.ARM_TENANT_ID }} > /dev/null
@@ -49,12 +51,24 @@ jobs:
               -var 'sql_login=${{ secrets.SQL_LOGIN }}' \
               -var 'sql_password=${{ secrets.SQL_PASSWORD }}'
             ;;
-          *)
-            terraform ${{ github.event.inputs.command }} -input=false -auto-approve \
+          apply)
+            terraform apply -input=false -auto-approve \
               -var 'env_name=${{ github.event.inputs.environment }}' \
               -var 'vault_pass=${{ secrets.VAULT_PASS }}' \
               -var 'sql_login=${{ secrets.SQL_LOGIN }}' \
               -var 'sql_password=${{ secrets.SQL_PASSWORD }}'
+            bash acr-firewall-allow.sh apply
+            ;;
+          destroy)
+            bash acr-firewall-allow.sh destroy
+            terraform destroy -input=false -auto-approve \
+              -var 'env_name=${{ github.event.inputs.environment }}' \
+              -var 'vault_pass=${{ secrets.VAULT_PASS }}' \
+              -var 'sql_login=${{ secrets.SQL_LOGIN }}' \
+              -var 'sql_password=${{ secrets.SQL_PASSWORD }}'
+            ;;
+          *)
+            echo "Invalid command: ${{ github.event.inputs.command }}"
             ;;
         esac
     - name: Remove runner IP from storage account firewall
