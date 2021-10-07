@@ -44,6 +44,7 @@ jobs:
     - name: Add runner IP to storage account firewall
       run: |
         az storage account network-rule add -n ${{ env.STORAGE_ACCOUNT_NAME }} -g ${{ env.RESOURCE_GROUP_NAME }} --ip-address ${{ steps.ip.outputs.ipv4 }} > /dev/null
+        sleep 10s
     - name: Terraform init
       run: |
         terraform init -upgrade \
