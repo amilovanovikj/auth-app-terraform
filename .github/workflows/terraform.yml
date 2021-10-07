@@ -2,11 +2,17 @@ on:
   workflow_dispatch:
     inputs:
       command:
-        description: 'The terraform command to run [ plan, apply, destroy ]'
+        description: |
+          The terraform command to run.
+          Possible values:
+            [ plan, apply, destroy ]
         required: true
         default: plan
       environment:
-        description: 'The environment to provision [ dev, test, prod ]'
+        description: |
+          The environment to provision.
+          Possible values:
+            [ dev, test, prod ]
         required: true
         default: dev
 
