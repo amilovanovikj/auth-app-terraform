@@ -26,27 +26,6 @@ variable vault_pass {
   description = "Specify the Ansible Vault password"
 }
 
-variable client_id {
-  type        = string
-  sensitive   = true
-  description = "The application (client) ID of the SPN used for resource provisioning with Terraform"
-}
-variable client_secret {
-  type        = string
-  sensitive   = true
-  description = "The client secret of the SPN used for resource provisioning with Terraform"
-}
-variable tenant_id {
-  type        = string
-  sensitive   = true
-  description = "The AAD tenant where the SPN used for resource provisioning with Terraform is located in"
-}
-variable subscription_id {
-  type        = string
-  sensitive   = true
-  description = "The ID of the Azure subscription where Terraform will provision resources"
-}
-
 locals {  
   env = {
     dev = {
