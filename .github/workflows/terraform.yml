@@ -44,6 +44,10 @@ jobs:
     - name: Add runner IP to storage account firewall
       run: |
         az storage account network-rule add -n ${{ env.STORAGE_ACCOUNT_NAME }} -g ${{ env.RESOURCE_GROUP_NAME }} --ip-address ${{ steps.ip.outputs.ipv4 }} > /dev/null
+        kv=$(az keyvault list -g auth-${{ github.event.inputs.environment }}-01-rg)
+        if [ "$kv" != "[]" ]; then
+          az keyvault network-rule add -n ${{ secrets.KEY_VAULT_NAME }} -g auth-${{ github.event.inputs.environment }}-01-rg --ip-address ${{ steps.ip.outputs.ipv4 }}/32 > /dev/null
+        fi
         sleep 10s
     - name: Terraform init
       run: |
