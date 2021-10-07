@@ -22,7 +22,7 @@ case $1 in
     echo "Removing web app IP addresses from ACR"
     for ip in $ip_addresses
     do
-      az acr network-rule remove -n $acr_name -g $acr_rg --ip-address $ip
+      az acr network-rule remove -n $acr_name -g $acr_rg --ip-address $ip > /dev/null
     done
     exit 0
     ;;
@@ -30,7 +30,7 @@ case $1 in
     echo "Adding web app IP addresses to ACR"
     for ip in $ip_addresses
     do
-      az acr network-rule add -n $acr_name -g $acr_rg --ip-address $ip
+      az acr network-rule add -n $acr_name -g $acr_rg --ip-address $ip > /dev/null
     done
     exit 0
     ;;
