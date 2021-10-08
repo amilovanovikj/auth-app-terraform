@@ -128,5 +128,12 @@ locals {
       app_name = "${local.project_name}-app-frontend"
     }
 
+    monitoring = {
+      appinsights_name   = "${local.prefix}-appinsights-${local.env["${var.env_name}"].env_char}${local.env_num}-${local.project_name}"
+      log_workspace_name = "${local.prefix}-logworkspace-${local.env["${var.env_name}"].env_char}${local.env_num}-${local.project_name}"
+      log_workspace_sku  = "PerGB2018"
+      log_retention      = 30
+      app_type           = "Node.JS"
+    }
   }
 }

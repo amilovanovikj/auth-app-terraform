@@ -1,18 +1,22 @@
 module "webapp" {
-  env           = local.variables
-  source        = "./module_webapp"
-  depends_on    = [
+  env    = local.variables
+  source = "./module_webapp"
+  
+  appinsights_instrumentation_key = module.monitoring.instrumentation_key
+  appinsights_connection_string   = module.monitoring.connection_string
+
+  depends_on = [
     module.database
   ]
 }
 
 module "keyvault" {
-  env           = local.variables
-  subnet_id     = azurerm_subnet.subnet.id
-  backend_id    = module.webapp.backend_id
-  frontend_id   = module.webapp.frontend_id
-  redis_key     = module.database.redis_key
-  source        = "./module_keyvault"
+  env         = local.variables
+  subnet_id   = azurerm_subnet.subnet.id
+  backend_id  = module.webapp.backend_id
+  frontend_id = module.webapp.frontend_id
+  redis_key   = module.database.redis_key
+  source      = "./module_keyvault"
   
   providers = {
     ansiblevault.secrets = ansiblevault.secrets
@@ -20,11 +24,16 @@ module "keyvault" {
 }
 
 module "database" {
-  env           = local.variables
-  subnet_id     = azurerm_subnet.subnet.id
-  sql_login     = var.sql_login
-  sql_password  = var.sql_password
-  source        = "./module_database"
+  env          = local.variables
+  subnet_id    = azurerm_subnet.subnet.id
+  sql_login    = var.sql_login
+  sql_password = var.sql_password
+  source       = "./module_database"
+}
+
+module "monitoring" {
+  env    = local.variables
+  source = "./module_monitoring"
 }
 
 resource "azurerm_subnet" "subnet" {

@@ -44,25 +44,28 @@ resource "azurerm_app_service" "backend" {
   }
 
   app_settings = {
-    WEBSITE_VNET_ROUTE_ALL          = true
-    DOCKER_REGISTRY_SERVER_URL      = "https://${var.env.acr.name}.azurecr.io"
-    DOCKER_REGISTRY_SERVER_USERNAME = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-be-username)"
-    DOCKER_REGISTRY_SERVER_PASSWORD = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-be-password)"
-    PORT                            = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=server-port)"
-    REDIS_URL                       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=redis-url)"
-    REDIS_KEY                       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=redis-key)"
-    SESSION_SECRET                  = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=session-secret)"
-    TYPEORM_HOST                    = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-host)"
-    TYPEORM_USERNAME                = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-username)"
-    TYPEORM_PASSWORD                = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-password)"
-    TYPEORM_DATABASE                = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-database)"
-    TYPEORM_PORT                    = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-port)"
-    TYPEORM_LOGGING                 = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-logging)"
-    TYPEORM_ENTITIES                = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-entities)"
-    CERT_LOCATION                   = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=cert-location)"
-    TYPEORM_MIGRATIONS              = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-migrations)"
-    CORS_ORIGIN                     = "https://${var.env.frontend.name}.azurewebsites.net"
-    NODE_ENV                        = var.env.asp.node_env
+    WEBSITE_VNET_ROUTE_ALL                = true
+    APPINSIGHTS_INSTRUMENTATIONKEY        = var.appinsights_instrumentation_key
+    APPLICATIONINSIGHTS_CONNECTION_STRING = var.appinsights_connection_string
+    DOCKER_REGISTRY_SERVER_URL            = "https://${var.env.acr.name}.azurecr.io"
+    DOCKER_REGISTRY_SERVER_USERNAME       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-be-username)"
+    DOCKER_REGISTRY_SERVER_PASSWORD       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-be-password)"
+    
+    PORT               = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=server-port)"
+    REDIS_URL          = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=redis-url)"
+    REDIS_KEY          = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=redis-key)"
+    SESSION_SECRET     = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=session-secret)"
+    TYPEORM_HOST       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-host)"
+    TYPEORM_USERNAME   = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-username)"
+    TYPEORM_PASSWORD   = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-password)"
+    TYPEORM_DATABASE   = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-database)"
+    TYPEORM_PORT       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-port)"
+    TYPEORM_LOGGING    = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-logging)"
+    TYPEORM_ENTITIES   = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-entities)"
+    CERT_LOCATION      = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=cert-location)"
+    TYPEORM_MIGRATIONS = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-migrations)"
+    CORS_ORIGIN        = "https://${var.env.frontend.name}.azurewebsites.net"
+    NODE_ENV           = var.env.asp.node_env
   }
 }
 
@@ -99,10 +102,12 @@ resource "azurerm_app_service" "frontend" {
   }
 
   app_settings = {
-    WEBSITE_VNET_ROUTE_ALL          = true
-    DOCKER_REGISTRY_SERVER_URL      = "https://${var.env.acr.name}.azurecr.io"
-    DOCKER_REGISTRY_SERVER_USERNAME = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-fe-username)"
-    DOCKER_REGISTRY_SERVER_PASSWORD = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-fe-password)"
+    WEBSITE_VNET_ROUTE_ALL                = true
+    APPINSIGHTS_INSTRUMENTATIONKEY        = var.appinsights_instrumentation_key
+    APPLICATIONINSIGHTS_CONNECTION_STRING = var.appinsights_connection_string
+    DOCKER_REGISTRY_SERVER_URL            = "https://${var.env.acr.name}.azurecr.io"
+    DOCKER_REGISTRY_SERVER_USERNAME       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-fe-username)"
+    DOCKER_REGISTRY_SERVER_PASSWORD       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-fe-password)"
   }
 }
 
