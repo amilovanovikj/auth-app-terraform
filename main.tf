@@ -1,10 +1,6 @@
 module "webapp" {
-  env    = local.variables
-  source = "./module_webapp"
-  
-  appinsights_instrumentation_key = module.monitoring.instrumentation_key
-  appinsights_connection_string   = module.monitoring.connection_string
-
+  env        = local.variables
+  source     = "./module_webapp"
   depends_on = [
     module.database
   ]
@@ -15,9 +11,12 @@ module "keyvault" {
   subnet_id   = azurerm_subnet.subnet.id
   backend_id  = module.webapp.backend_id
   frontend_id = module.webapp.frontend_id
-  redis_key   = module.database.redis_key
   source      = "./module_keyvault"
   
+  redis_key                       = module.database.redis_key
+  appinsights_instrumentation_key = module.monitoring.instrumentation_key
+  appinsights_connection_string   = module.monitoring.connection_string
+
   providers = {
     ansiblevault.secrets = ansiblevault.secrets
   }

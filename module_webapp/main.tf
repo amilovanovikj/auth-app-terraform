@@ -45,11 +45,11 @@ resource "azurerm_app_service" "backend" {
 
   app_settings = {
     WEBSITE_VNET_ROUTE_ALL                = true
-    APPINSIGHTS_INSTRUMENTATIONKEY        = var.appinsights_instrumentation_key
-    APPLICATIONINSIGHTS_CONNECTION_STRING = var.appinsights_connection_string
     DOCKER_REGISTRY_SERVER_URL            = "https://${var.env.acr.name}.azurecr.io"
     DOCKER_REGISTRY_SERVER_USERNAME       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-be-username)"
     DOCKER_REGISTRY_SERVER_PASSWORD       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-be-password)"
+    APPINSIGHTS_INSTRUMENTATIONKEY        = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=appinsights-instrumentation-key)"
+    APPLICATIONINSIGHTS_CONNECTION_STRING = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=appinsights-connection-string)"
     
     PORT               = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=server-port)"
     REDIS_URL          = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=redis-url)"
@@ -103,11 +103,11 @@ resource "azurerm_app_service" "frontend" {
 
   app_settings = {
     WEBSITE_VNET_ROUTE_ALL                = true
-    APPINSIGHTS_INSTRUMENTATIONKEY        = var.appinsights_instrumentation_key
-    APPLICATIONINSIGHTS_CONNECTION_STRING = var.appinsights_connection_string
     DOCKER_REGISTRY_SERVER_URL            = "https://${var.env.acr.name}.azurecr.io"
     DOCKER_REGISTRY_SERVER_USERNAME       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-fe-username)"
     DOCKER_REGISTRY_SERVER_PASSWORD       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-fe-password)"
+    APPINSIGHTS_INSTRUMENTATIONKEY        = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=appinsights-instrumentation-key)"
+    APPLICATIONINSIGHTS_CONNECTION_STRING = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=appinsights-connection-string)"
   }
 }
 

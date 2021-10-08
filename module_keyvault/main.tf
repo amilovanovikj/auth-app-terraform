@@ -93,3 +93,23 @@ resource "azurerm_key_vault_secret" "redis_key" {
     azurerm_key_vault_access_policy.spn
   ]
 }
+
+resource "azurerm_key_vault_secret" "appinsights_instrumentation_key" {
+  key_vault_id = azurerm_key_vault.kv.id
+  name         = "appinsights-instrumentation-key"
+  value        = var.appinsights_instrumentation_key
+
+  depends_on = [
+    azurerm_key_vault_access_policy.spn
+  ]
+}
+
+resource "azurerm_key_vault_secret" "appinsights_connection_string" {
+  key_vault_id = azurerm_key_vault.kv.id
+  name         = "appinsights-connection-string"
+  value        = var.appinsights_connection_string
+
+  depends_on = [
+    azurerm_key_vault_access_policy.spn
+  ]
+}
