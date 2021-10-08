@@ -16,6 +16,7 @@ resource "azurerm_app_service" "backend" {
   resource_group_name = var.env.rg.name
   location            = var.env.rg.location
   app_service_plan_id = azurerm_app_service_plan.asp.id
+  app_settings        = var.env.backend.app_settings
   enabled             = true
   https_only          = true
   
@@ -42,31 +43,6 @@ resource "azurerm_app_service" "backend" {
     http2_enabled = true
     ftps_state    = "Disabled"
   }
-
-  app_settings = {
-    WEBSITE_VNET_ROUTE_ALL                = true
-    DOCKER_REGISTRY_SERVER_URL            = "https://${var.env.acr.name}.azurecr.io"
-    DOCKER_REGISTRY_SERVER_USERNAME       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-be-username)"
-    DOCKER_REGISTRY_SERVER_PASSWORD       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-be-password)"
-    APPINSIGHTS_INSTRUMENTATIONKEY        = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=appinsights-instrumentation-key)"
-    APPLICATIONINSIGHTS_CONNECTION_STRING = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=appinsights-connection-string)"
-    
-    PORT               = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=server-port)"
-    REDIS_URL          = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=redis-url)"
-    REDIS_KEY          = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=redis-key)"
-    SESSION_SECRET     = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=session-secret)"
-    TYPEORM_HOST       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-host)"
-    TYPEORM_USERNAME   = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-username)"
-    TYPEORM_PASSWORD   = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-password)"
-    TYPEORM_DATABASE   = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-database)"
-    TYPEORM_PORT       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-port)"
-    TYPEORM_LOGGING    = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-logging)"
-    TYPEORM_ENTITIES   = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-entities)"
-    CERT_LOCATION      = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=cert-location)"
-    TYPEORM_MIGRATIONS = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=typeorm-migrations)"
-    CORS_ORIGIN        = "https://${var.env.frontend.name}.azurewebsites.net"
-    NODE_ENV           = var.env.asp.node_env
-  }
 }
 
 resource "azurerm_app_service" "frontend" {
@@ -74,6 +50,7 @@ resource "azurerm_app_service" "frontend" {
   resource_group_name = var.env.rg.name
   location            = var.env.rg.location
   app_service_plan_id = azurerm_app_service_plan.asp.id
+  app_settings        = var.env.frontend.app_settings
   enabled             = true
   https_only          = true
   
@@ -99,15 +76,6 @@ resource "azurerm_app_service" "frontend" {
     always_on     = true
     http2_enabled = true
     ftps_state    = "Disabled"
-  }
-
-  app_settings = {
-    WEBSITE_VNET_ROUTE_ALL                = true
-    DOCKER_REGISTRY_SERVER_URL            = "https://${var.env.acr.name}.azurecr.io"
-    DOCKER_REGISTRY_SERVER_USERNAME       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-fe-username)"
-    DOCKER_REGISTRY_SERVER_PASSWORD       = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-fe-password)"
-    APPINSIGHTS_INSTRUMENTATIONKEY        = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=appinsights-instrumentation-key)"
-    APPLICATIONINSIGHTS_CONNECTION_STRING = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=appinsights-connection-string)"
   }
 }
 
