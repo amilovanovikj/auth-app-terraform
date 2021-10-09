@@ -6,8 +6,8 @@ locals {
   backend_app_settings = {
     WEBSITE_VNET_ROUTE_ALL                          = true
     DOCKER_REGISTRY_SERVER_URL                      = "https://${var.env.acr.name}.azurecr.io"
-    DOCKER_REGISTRY_SERVER_USERNAME                 = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-fe-username)"
-    DOCKER_REGISTRY_SERVER_PASSWORD                 = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-fe-password)"
+    DOCKER_REGISTRY_SERVER_USERNAME                 = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-be-username)"
+    DOCKER_REGISTRY_SERVER_PASSWORD                 = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=acr-be-password)"
     APPINSIGHTS_INSTRUMENTATIONKEY                  = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=appinsights-instrumentation-key)"
     APPLICATIONINSIGHTS_CONNECTION_STRING           = "@Microsoft.KeyVault(VaultName=${var.env.kv.name};SecretName=appinsights-connection-string)"
     APPINSIGHTS_PROFILERFEATURE_VERSION             = "disabled"
