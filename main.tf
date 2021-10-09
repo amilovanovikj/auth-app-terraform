@@ -9,8 +9,8 @@ module "webapp" {
 module "keyvault" {
   env         = local.variables
   subnet_id   = azurerm_subnet.subnet.id
-  backend_id  = module.webapp.backend_id
-  frontend_id = module.webapp.frontend_id
+  backend_id  = module.webapp.backend_mi
+  frontend_id = module.webapp.frontend_mi
   source      = "./module_keyvault"
   
   redis_key                       = module.database.redis_key
@@ -31,8 +31,10 @@ module "database" {
 }
 
 module "monitoring" {
-  env    = local.variables
-  source = "./module_monitoring"
+  env         = local.variables
+  backend_id  = module.webapp.backend_id
+  frontend_id = module.webapp.frontend_id
+  source      = "./module_monitoring"
 }
 
 resource "azurerm_subnet" "subnet" {

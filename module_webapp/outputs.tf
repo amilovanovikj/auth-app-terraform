@@ -1,9 +1,17 @@
-output "backend_id" {
+output "backend_mi" {
   value = azurerm_app_service.backend.identity.0.principal_id
 }
 
-output "frontend_id" {
+output "frontend_mi" {
   value = azurerm_app_service.frontend.identity.0.principal_id
+}
+
+output "backend_id" {
+  value = azurerm_app_service.backend.id
+}
+
+output "frontend_id" {
+  value = azurerm_app_service.frontend.id
 }
 
 output "ip_addresses" {
