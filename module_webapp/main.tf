@@ -16,7 +16,7 @@ resource "azurerm_app_service" "backend" {
   resource_group_name = var.env.rg.name
   location            = var.env.rg.location
   app_service_plan_id = azurerm_app_service_plan.asp.id
-  app_settings        = var.env.backend.app_settings
+  app_settings        = local.backend_app_settings
   enabled             = true
   https_only          = true
   
@@ -50,7 +50,7 @@ resource "azurerm_app_service" "frontend" {
   resource_group_name = var.env.rg.name
   location            = var.env.rg.location
   app_service_plan_id = azurerm_app_service_plan.asp.id
-  app_settings        = var.env.frontend.app_settings
+  app_settings        = local.frontend_app_settings
   enabled             = true
   https_only          = true
   
