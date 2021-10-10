@@ -30,3 +30,8 @@ data "azurerm_private_dns_zone" "redis" {
   name                = "privatelink.redis.cache.windows.net"
   resource_group_name = data.azurerm_resource_group.shared.name
 }
+
+data "azurerm_monitor_action_group" "email" {
+  name                = "auth-app-alerts"
+  resource_group_name = data.azurerm_resource_group.shared.name
+}

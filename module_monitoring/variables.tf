@@ -9,3 +9,7 @@ variable "backend_id" {
 variable "frontend_id" {
   type = string
 }
+
+variable "appservice_id" {
+  type = string
+}

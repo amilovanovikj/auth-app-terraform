@@ -31,10 +31,11 @@ module "database" {
 }
 
 module "monitoring" {
-  env         = local.variables
-  backend_id  = module.webapp.backend_id
-  frontend_id = module.webapp.frontend_id
-  source      = "./module_monitoring"
+  env           = local.variables
+  backend_id    = module.webapp.backend_id
+  frontend_id   = module.webapp.frontend_id
+  appservice_id = module.webapp.appservice_id
+  source        = "./module_monitoring"
 }
 
 resource "azurerm_subnet" "subnet" {

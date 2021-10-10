@@ -134,6 +134,7 @@ locals {
       log_workspace_sku  = "PerGB2018"
       log_retention      = 30
       app_type           = "Node.JS"
+      email_action_group = data.azurerm_monitor_action_group.email.id
     }
   }
 }
